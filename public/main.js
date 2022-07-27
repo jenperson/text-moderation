@@ -71,13 +71,13 @@ Guestbook.prototype.saveMessage = function(e) {
   }
 
   Guestbook.checkContent(this.messageInput.value).then((toxic) => {
-    // if (toxic === true) {
-    //   // display a message to the user to be kind
-    //   Guestbook.displaySnackbar();
-    //   // clear the message field
-    //   Guestbook.resetMaterialTextfield(this.messageInput);
-    //   return;
-    // }
+    if (toxic === true) {
+      // display a message to the user to be kind
+      Guestbook.displaySnackbar();
+      // clear the message field
+      Guestbook.resetMaterialTextfield(this.messageInput);
+      return;
+    }
     Guestbook.fbMessagesRef.push({
       name: this.nameInput.value,
       text: this.messageInput.value,

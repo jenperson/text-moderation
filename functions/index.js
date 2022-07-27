@@ -16,7 +16,6 @@
 'use strict';
 
 const functions = require('firebase-functions');
-require('@tensorflow/tfjs-node');
 const toxicity = require('@tensorflow-models/toxicity');
 
 exports.moderator = functions.database.ref('/messages/{messageId}').onCreate(async (snapshot, context) => {
@@ -29,7 +28,7 @@ exports.moderator = functions.database.ref('/messages/{messageId}').onCreate(asy
   }
   functions.logger.log('Retrieved message content: ', message);
 
-  // Run moderation checks on on the message and delete if needed.
+  // Run moderation checks on the message and delete if needed.
   const moderateResult = await moderateMessage(message.text);
   functions.logger.log(
     'Message has been moderated. Does message violate rules? ',
