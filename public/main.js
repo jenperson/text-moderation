@@ -49,13 +49,12 @@ function Guestbook() {
   // Function calling displayMessage with correct attributes from Firebase data.
   var callDisplayMessage = function (data) {
     var val = data.val();
-    console.log("data value:", val);
-    this.displayMessage(data.key, val.name, val.text, val.moderated);
+    this.displayMessage(data.key, val.name, val.text);
   }.bind(this);
 
+  // Function removing message from view when deleted from database
   var callRemoveMessage = function (data) {
     var val = data.val();
-    console.log("data value:", val);
     this.displayMessage(data.key);
   }.bind(this);
 
@@ -114,11 +113,10 @@ Guestbook.MESSAGE_CARD_TEMPLATE =
               'message-card mdl-cell--4-col-tablet mdl-cell--4-col-desktop">' +
       '<div class="message"></div>' +
       '<div class="author"></div>' +
-      '<div class="moderated">(This message has been moderated)</div>' +
   '</div>';
 
 // Displays a Visitor's Book Message in the UI.
-Guestbook.prototype.displayMessage = function(key, name, message, moderated) {
+Guestbook.prototype.displayMessage = function(key, name, message) {
   var div = document.getElementById(key);
   // If an element for that message does not exists yet we create it.
   if (!div) {
@@ -129,12 +127,10 @@ Guestbook.prototype.displayMessage = function(key, name, message, moderated) {
     this.messageList.insertBefore(div, document.getElementById('message-title').nextSibling);
   }
   if (!name) {
-    console.log('message removed');
     div.remove();
     return;
   }
   div.querySelector('.author').textContent = name;
-  div.querySelector('.moderated').style.visibility = moderated ? 'visible' : 'hidden';
   var messageElement = div.querySelector('.message');
   messageElement.textContent = message;
   // Replace all line breaks by <br>.
