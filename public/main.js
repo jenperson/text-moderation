@@ -49,7 +49,14 @@ function Guestbook() {
   // Function calling displayMessage with correct attributes from Firebase data.
   var callDisplayMessage = function (data) {
     var val = data.val();
+    console.log("data value:", val);
     this.displayMessage(data.key, val.name, val.text, val.moderated);
+  }.bind(this);
+
+  var callRemoveMessage = function (data) {
+    var val = data.val();
+    console.log("data value:", val);
+    this.displayMessage(data.key);
   }.bind(this);
 
   // Loads the last 12 messages and listen for new ones.
@@ -57,7 +64,7 @@ function Guestbook() {
   // Listen for messages updates.
   Guestbook.fbMessagesRef.limitToLast(12).on('child_changed', callDisplayMessage);
   // Listen for messages updates.
-  Guestbook.fbMessagesRef.limitToLast(12).on('child_removed', callDisplayMessage);
+  Guestbook.fbMessagesRef.limitToLast(12).on('child_removed', callRemoveMessage);
 }
 
 // Reference to the new messages feed in the Firebase DB.
@@ -120,6 +127,11 @@ Guestbook.prototype.displayMessage = function(key, name, message, moderated) {
     div = container.firstChild;
     div.setAttribute('id', key);
     this.messageList.insertBefore(div, document.getElementById('message-title').nextSibling);
+  }
+  if (!name) {
+    console.log('message removed');
+    div.remove();
+    return;
   }
   div.querySelector('.author').textContent = name;
   div.querySelector('.moderated').style.visibility = moderated ? 'visible' : 'hidden';
